@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+*.egg
+
+# Virtual Environment
+venv/
+env/
+
+# Django stuff
+db.sqlite3
+/staticfiles/
+media/
+
+# VS Code
+.vscode/
+
+# Environment variables
+*.env
+.env
+
+# Windows junk
+Thumbs.db
