@@ -1,10 +1,11 @@
 from django.db import models
 
-class VehicleLocation(models.Model):
-    vehicle_id = models.CharField(max_length=50)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
-    updated_at = models.DateTimeField(auto_now=True)
+class BusLocation(models.Model):
+    device_id = models.CharField(max_length=50)
+    lat = models.DecimalField(max_digits=12, decimal_places=9)
+    lng = models.DecimalField(max_digits=12, decimal_places=9)
+    speed = models.FloatField()
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.vehicle_id
+        return f"{self.device_id} - {self.timestamp}"

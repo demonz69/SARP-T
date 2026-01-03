@@ -1,59 +1,79 @@
-<!-- myapp/templates/map.html -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Live Bus Tracking</title>
+    <title>Smart Transport - Live Tracking</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
     <style>
-        #map { height: 500px; width: 100%; border-radius: 10px; }
-        .info-panel { padding: 10px; font-family: Arial; background: #f4f4f4; }
+        body { margin: 0; padding: 0; font-family: sans-serif; }
+        #map { height: 80vh; width: 100%; }
+        .dashboard { padding: 20px; background: #2c3e50; color: white; display: flex; justify-content: space-around; }
+        .stat { text-align: center; }
     </style>
 </head>
 <body>
 
-    <div class="info-panel">
-        <h2>Bus ID: <span id="bus-id">bus_01</span></h2>
-        <p>Speed: <span id="speed">0</span> km/h | Last Updated: <span id="time">-</span></p>
+<div class="dashboard">
+    <div class="stat">
+        <h3>Bus ID</h3>
+        <p id="bus-id">bus_01</p>
     </div>
-    <div id="map"></div>
+    <div class="stat">
+        <h3>Speed</h3>
+        <p><span id="speed">0</span> km/h</p>
+    </div>
+    <div class="stat">
+        <h3>Last Update</h3>
+        <p id="time">--:--:--</p>
+    </div>
+</div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        // 1. Initialize the map
-        var map = L.map('map').setView([27.7172, 85.3240], 15); // Default to Kathmandu
+<div id="map"></div>
 
-        // 2. Add OpenStreetMap Tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-        // 3. Create a Marker
-        var busMarker = L.marker([27.7172, 85.3240]).addTo(map)
-            .bindPopup('Bus 01')
-            .openPopup();
+<script>
+    // 1. Initialize Map (Centered on a default location)
+    var map = L.map('map').setView([27.7172, 85.3240], 13);
 
-        // 4. Function to update location
-        function updateLocation() {
-            fetch('/api/location/')  // Your Django API URL
-                .then(response => response.json())
-                .then(data => {
-                    if (data.lat && data.lng) {
-                        var newLatLng = new L.LatLng(data.lat, data.lng);
-                        
-                        // Update marker and map view
-                        busMarker.setLatLng(newLatLng);
-                        map.panTo(newLatLng);
+    // 2. Add OpenStreetMap Tiles (Free!)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
 
-                        // Update UI texts
-                        document.getElementById('speed').innerText = data.speed;
-                        document.getElementById('time').innerText = data.timestamp;
-                    }
-                })
-                .catch(error => console.error('Error fetching location:', error));
-        }
+    // 3. Create a Marker for the Bus
+    var busMarker = L.marker([27.7172, 85.3240]).addTo(map)
+        .bindPopup('Bus 01 - Tracking Live')
+        .openPopup();
 
-        // 5. Update every 3 seconds
-        setInterval(updateLocation, 3000);
-    </script>
+    // 4. Function to Fetch Data from Django API
+    function updateMap() {
+        fetch('/api/location/')
+            .then(response => response.json())
+            .then(data => {
+                if (data.lat && data.lng) {
+                    var newPos = [data.lat, data.lng];
+
+                    // Move marker and center map
+                    busMarker.setLatLng(newPos);
+                    map.panTo(newPos);
+
+                    // Update Dashboard
+                    document.getElementById('speed').innerText = data.speed;
+                    document.getElementById('time').innerText = data.timestamp;
+                }
+            })
+            .catch(error => console.error('Error fetching GPS:', error));
+    }
+
+    // 5. Update every 3 seconds
+    setInterval(updateMap, 3000);
+</script>
+
 </body>
 </html>
