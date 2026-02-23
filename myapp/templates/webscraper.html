@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hotel Data Logger</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background: #eceff1; color: #333; }
+        .container { max-width: 1200px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        textarea { width: 100%; height: 150px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; resize: vertical; margin-bottom: 10px; }
+        .controls { margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+        
+        button { padding: 10px 18px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-format { background: #28a745; color: white; }
+        .btn-download { background: #007bff; color: white; }
+        .btn-copy { background: #6c757d; color: white; }
+        .btn-clear { background: #dc3545; color: white; margin-left: auto; }
+        
+        /* Delete button for rows */
+        .btn-delete-row { background: #ff4d4d; color: white; padding: 5px 10px; font-size: 11px; }
+        button:hover { opacity: 0.8; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f8f9fa; position: sticky; top: 0; z-index: 10; }
+        tr:hover { background-color: #f1f1f1; }
+        .stats { margin-top: 10px; font-weight: bold; color: #555; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Hotel Group Data Logger</h2>
+    <textarea id="inputData" placeholder="Paste data here..."></textarea>
+    
+    <div class="controls">
+        <button class="btn-format" onclick="processData()">Format & Save</button>
+        <button class="btn-download" onclick="downloadCSV()">Download Excel (CSV)</button>
+        <button class="btn-copy" onclick="copyToClipboard()">Copy Table for Excel</button>
+        <button class="btn-clear" onclick="clearAllData()">Clear All Data</button>
+    </div>
+
+    <div class="stats" id="recordCount">Total Records: 0</div>
+
+    <table id="resultTable">
+        <thead>
+            <tr>
+                <th>Group Name</th>
+                <th>Needs Description</th>
+                <th>Arrival</th>
+                <th>Quote Due</th>
+                <th>Status</th>
+                <th>Room Rate</th>
+                <th>Banquet</th>
+                <th>Meeting</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+</div>
+
+<script>
+    // Initialize data from browser storage
+    let masterData = JSON.parse(localStorage.getItem('hotelRecords')) || [];
+    renderTable();
+
+    function processData() {
+        const raw = document.getElementById('inputData').value;
+        if (!raw.trim()) return;
+
+        // Clean lines and ignore the header if pasted
+        const lines = raw.split('\n').map(l => l.trim()).filter(l => l !== "" && !l.startsWith("Group Needs"));
+        
+        let i = 0;
+        while (i < lines.length) {
+            let groupName = lines[i];
+            let needs = [];
+            let arrivalDate = "";
+            let quoteDue = "";
+            let status = "";
+            let rates = [];
+
+            i++;
+
+            // Regex to identify the arrival date (e.g., "Jan 7" or "Feb 20")
+            const dateRegex = /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d+$/;
+            
+            while (i < lines.length && !dateRegex.test(lines[i])) {
+                needs.push(lines[i]);
+                i++;
+            }
+
+            if (i < lines.length) { arrivalDate = lines[i]; i++; }
+            if (i < lines.length) { quoteDue = lines[i]; i++; }
+            if (i < lines.length) { status = lines[i]; i++; }
+
+            while (i < lines.length && lines[i].startsWith('$')) {
+                rates.push(lines[i]);
+                i++;
+            }
+
+            masterData.push({
+                groupName,
+                needs: needs.join(" | "),
+                arrivalDate,
+                quoteDue,
+                status,
+                roomRate: rates[0] || "",
+                banquetRate: rates[1] || "",
+                meetingRate: rates[2] || ""
+            });
+        }
+
+        saveAndRefresh();
+        document.getElementById('inputData').value = "";
+    }
+
+    // Save data to browser memory and update the UI
+    function saveAndRefresh() {
+        localStorage.setItem('hotelRecords', JSON.stringify(masterData));
+        renderTable();
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = "";
+        
+        masterData.forEach((r, index) => {
+            let row = tbody.insertRow();
+            row.insertCell(0).innerText = r.groupName;
+            row.insertCell(1).innerText = r.needs;
+            row.insertCell(2).innerText = r.arrivalDate;
+            row.insertCell(3).innerText = r.quoteDue;
+            row.insertCell(4).innerText = r.status;
+            row.insertCell(5).innerText = r.roomRate;
+            row.insertCell(6).innerText = r.banquetRate;
+            row.insertCell(7).innerText = r.meetingRate;
+            
+            // Add Delete Button Cell
+            let actionCell = row.insertCell(8);
+            let delBtn = document.createElement("button");
+            delBtn.innerText = "Delete";
+            delBtn.className = "btn-delete-row";
+            delBtn.onclick = function() { deleteRow(index); };
+            actionCell.appendChild(delBtn);
+        });
+
+        document.getElementById('recordCount').innerText = "Total Records: " + masterData.length;
+    }
+
+    // Delete just ONE row
+    function deleteRow(index) {
+        if(confirm("Delete this entry?")) {
+            masterData.splice(index, 1);
+            saveAndRefresh();
+        }
+    }
+
+    function clearAllData() {
+        if(confirm("Are you sure you want to delete EVERYTHING?")) {
+            masterData = [];
+            saveAndRefresh();
+        }
+    }
+
+    function copyToClipboard() {
+        const table = document.getElementById('resultTable');
+        const range = document.createRange();
+        range.selectNode(table);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand('copy');
+        window.getSelection().removeAllRanges();
+        alert("Table copied! You can now paste (Ctrl+V) directly into Excel.");
+    }
+
+    function downloadCSV() {
+        if (masterData.length === 0) return alert("No data to download");
+        let csvContent = "Group Name,Needs,Arrival,Quote Due,Status,Room Rate,Banquet Rate,Meeting Rate\n";
+        masterData.forEach(r => {
+            let row = [`"${r.groupName}"`,`"${r.needs}"`,`"${r.arrivalDate}"`,`"${r.quoteDue}"`,`"${r.status}"`,`"${r.roomRate}"`,`"${r.banquetRate}"`,`"${r.meetingRate}"`];
+            csvContent += row.join(",") + "\n";
+        });
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "hotel_data.csv";
+        link.click();
+    }
+</script>
+
+</body>
+</html>

@@ -15,16 +15,16 @@ if BASE_DIR not in sys.path:
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Sarp_t.settings')
 django.setup()
 
-from myapp.models import VehicleLocation
+from myapp.models import BusLocationLocation
 
-BROKER = "broker.hivemq.com"
+BROKER = "test.mosquitto.org"
 TOPIC = "sarp_t/gps/bus01"
 
 def on_message(client, userdata, msg):
     try:
         data = json.loads(msg.payload.decode())
 
-        VehicleLocation.objects.update_or_create(
+        BusLocationLocation.objects.update_or_create(
             vehicle_id="bus01",
             defaults={
                 "latitude": data["lat"],
