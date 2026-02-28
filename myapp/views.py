@@ -10,7 +10,7 @@ def about(request):
 
 # This view serves the actual HTML page
 def map_view(request):
-    return render(request, 'map.html')
+    return render(request, 'myapp/map.html')
 
 # This view serves the latest coordinates as JSON
 def get_latest_location(request):
