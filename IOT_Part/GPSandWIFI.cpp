@@ -13,7 +13,7 @@ const char* mqtt_server = "test.mosquitto.org"; // Public Broker
 // Connect GPS TX to D6, GPS RX to D7
 SoftwareSerial gpsSerial(12, 13); 
 TinyGPSPlus gps;
-WiFiClient espClient;
+WiFiClient espClient;~~
 PubSubClient client(espClient);
 
 unsigned long lastMsg = 0;
