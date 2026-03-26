@@ -1,0 +1,1336 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SARP-T Admin</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    
+    <style>
+        /* CSS Reset & Variables */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --green: #1a7a42;
+            --green-mid: #22a058;
+            --green-light: #2ecc71;
+            --green-pale: #f0fdf6;
+            --green-bg: #e8f7ef;
+            --sidebar-w: 240px;
+            --text: #111c16;
+            --muted: #5a7063;
+            --border: #dceee4;
+            --white: #fff;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --info: #2563eb;
+            --shadow: 0 1px 3px rgba(0,0,0,.07), 0 4px 12px rgba(26,122,66,.08);
+        }
+
+        /* Base Styles */
+        html, body {
+            height: 100%;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--green-pale);
+            color: var(--text);
+        }
+
+        body {
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-w);
+            min-width: var(--sidebar-w);
+            background: var(--green);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .brand {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255,255,255,.1);
+        }
+
+        .brand-icon {
+            width: 34px;
+            height: 34px;
+            background: rgba(255,255,255,.15);
+            border-radius: 9px;
+            display: grid;
+            place-items: center;
+            font-size: 16px;
+        }
+
+        .brand-name {
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .brand-sub {
+            font-size: 11px;
+            opacity: .5;
+        }
+
+        .nav {
+            flex: 1;
+            padding: 10px 0;
+        }
+
+        .nav-sec {
+            padding: 12px 18px 4px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            opacity: .4;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255,255,255,.7);
+            background: none;
+            border: none;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+            transition: all .15s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,.08);
+            color: white;
+        }
+
+        .nav-btn.active {
+            background: rgba(255,255,255,.13);
+            color: white;
+            border-left-color: #a3f0c4;
+        }
+
+        .nav-btn i {
+            width: 16px;
+            text-align: center;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: var(--danger);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 20px;
+        }
+
+        .sidebar-foot {
+            padding: 14px 18px;
+            border-top: 1px solid rgba(255,255,255,.1);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,.15);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 13px;
+        }
+
+        .u-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .u-role {
+            font-size: 11px;
+            opacity: .5;
+        }
+
+        .logout {
+            margin-left: auto;
+            color: rgba(255,255,255,.5);
+            font-size: 15px;
+            text-decoration: none;
+        }
+
+        .logout:hover {
+            color: white;
+        }
+
+        /* Main Area */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .topbar {
+            background: white;
+            padding: 13px 26px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .topbar h1 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .topbar p {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 1px;
+        }
+
+        .time-pill {
+            background: var(--green-bg);
+            color: var(--green);
+            padding: 6px 13px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'DM Mono', monospace;
+        }
+
+        .live-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            background: var(--green-light);
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .3; }
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 22px 26px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Alerts & Messages */
+        .msgs {
+            margin-bottom: 14px;
+        }
+
+        .msg {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .msg.success {
+            background: #ecfdf5;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .msg.error {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        /* Cards & Stats */
+        .card {
+            background: white;
+            border-radius: 13px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 18px;
+        }
+
+        .card-head {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .card-title i {
+            color: var(--green);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .stat {
+            background: white;
+            border-radius: 13px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--green-light);
+        }
+
+        .stat.warn { border-bottom-color: var(--warning); }
+        .stat.danger { border-bottom-color: var(--danger); }
+        .stat.info { border-bottom-color: var(--info); }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .stat-val {
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .stat-val.warn {
+            color: var(--warning);
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 11px;
+            background: var(--green-bg);
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+            color: var(--green);
+        }
+
+        .stat.warn .stat-icon { background: #fffbeb; color: var(--warning); }
+        .stat.danger .stat-icon { background: #fef2f2; color: var(--danger); }
+        .stat.info .stat-icon { background: #eff6ff; color: var(--info); }
+
+        /* Grids */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 18px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        /* Maps */
+        #map, #map2 {
+            width: 100%;
+            height: 400px;
+        }
+
+        /* Tables */
+        .tbl-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        thead th {
+            text-align: left;
+            padding: 10px 15px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+            color: var(--muted);
+            background: var(--green-pale);
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: var(--green-pale);
+        }
+
+        /* Badges & Buttons */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge.green { background: #dcfce7; color: #166534; }
+        .badge.red { background: #fee2e2; color: #991b1b; }
+        .badge.yellow { background: #fef9c3; color: #854d0e; }
+        .badge.blue { background: #dbeafe; color: #1e40af; }
+        .badge.gray { background: #f1f5f9; color: #475569; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: all .15s;
+        }
+
+        .btn-primary { background: var(--green); color: white; }
+        .btn-primary:hover { background: #155e34; }
+        .btn-danger { background: #fee2e2; color: var(--danger); }
+        .btn-danger:hover { background: #fecaca; }
+        .btn-warn { background: #fffbeb; color: var(--warning); }
+        .btn-ghost { background: var(--green-bg); color: var(--green); }
+        .btn-ghost:hover { background: #d1fae5; }
+        .btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 7px; }
+
+        /* Forms & Inputs */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .fc {
+            width: 100%;
+            padding: 10px 13px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--text);
+            background: var(--green-pale);
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        .fc:focus {
+            border-color: var(--green-mid);
+            background: white;
+        }
+
+        textarea.fc {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            gap: 10px;
+        }
+
+        .search {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: white;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 7px 13px;
+            flex: 1;
+            max-width: 320px;
+        }
+
+        .search i {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .search input {
+            border: none;
+            outline: none;
+            font-size: 13px;
+            font-family: inherit;
+            background: none;
+            color: var(--text);
+            width: 100%;
+        }
+
+        /* Utilities & Modals */
+        .empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--muted);
+        }
+
+        .empty i {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 10px;
+            opacity: .3;
+        }
+
+        .stars {
+            color: #f59e0b;
+        }
+
+        .modal-bg {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.4);
+            z-index: 100;
+            place-items: center;
+        }
+
+        .modal-bg.open {
+            display: grid;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.2);
+        }
+
+        .modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .modal-head h2 {
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--muted);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar Navigation -->
+<nav class="sidebar">
+    <div class="brand">
+        <div class="brand-icon">
+            <i class="fa-solid fa-leaf"></i>
+        </div>
+        <div>
+            <div class="brand-name">SARP-T</div>
+            <div class="brand-sub">Admin Console</div>
+        </div>
+    </div>
+    
+    <div class="nav">
+        <div class="nav-sec">Overview</div>
+        <button class="nav-btn active" onclick="showPage('dashboard',this)">
+            <i class="fa-solid fa-chart-pie"></i> Dashboard
+        </button>
+        
+        <div class="nav-sec">Fleet</div>
+        <button class="nav-btn" onclick="showPage('buses',this)">
+            <i class="fa-solid fa-bus"></i> Live Buses
+        </button>
+        <button class="nav-btn" onclick="showPage('trips',this)">
+            <i class="fa-solid fa-clock-rotate-left"></i> Trip Logs
+        </button>
+        <button class="nav-btn" onclick="showPage('alerts',this)">
+            <i class="fa-solid fa-gauge-high"></i> Speed Alerts 
+            {% if speed_alerts_today > 0 %}
+                <span class="nav-badge">{{ speed_alerts_today }}</span>
+            {% endif %}
+        </button>
+        
+        <div class="nav-sec">People</div>
+        <button class="nav-btn" onclick="showPage('users',this)">
+            <i class="fa-solid fa-users"></i> Users
+        </button>
+        <button class="nav-btn" onclick="showPage('feedback',this)">
+            <i class="fa-solid fa-star"></i> Feedback
+        </button>
+        
+        <div class="nav-sec">System</div>
+        <a class="nav-btn" href="{% url 'logout' %}">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+        </a>
+    </div>
+    
+    <div class="sidebar-foot">
+        <div class="avatar">
+            <i class="fa-solid fa-user-tie"></i>
+        </div>
+        <div>
+            <div class="u-name">{{ request.user.full_name|default:request.user.username }}</div>
+            <div class="u-role">Administrator</div>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content Area -->
+<div class="main">
+    
+    <!-- Topbar -->
+    <div class="topbar">
+        <div>
+            <h1 id="page-title">Dashboard Overview</h1>
+            <p>Monitoring Eco-Friendly &amp; Safe Public Transport</p>
+        </div>
+        <div class="time-pill">
+            <span class="live-dot"></span>
+            <span id="clock">--:--:--</span>
+        </div>
+    </div>
+    
+    <div class="content">
+        <!-- Django Messages -->
+        {% if messages %}
+            <div class="msgs">
+                {% for message in messages %}
+                    <div class="msg {{ message.tags }}">
+                        <i class="fa-solid {% if message.tags == 'success' %}fa-circle-check{% else %}fa-circle-exclamation{% endif %}"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- DASHBOARD VIEW -->
+        <div id="page-dashboard" class="page active">
+            <div class="stats">
+                <div class="stat">
+                    <div>
+                        <div class="stat-label">Active Buses</div>
+                        <div class="stat-val" id="stat-buses">{{ active_buses }} / 8</div>
+                    </div>
+                    <div class="stat-icon"><i class="fa-solid fa-bus"></i></div>
+                </div>
+                <div class="stat info">
+                    <div>
+                        <div class="stat-label">Students</div>
+                        <div class="stat-val">{{ student_count }}</div>
+                    </div>
+                    <div class="stat-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                </div>
+                <div class="stat warn">
+                    <div>
+                        <div class="stat-label">Speed Alerts Today</div>
+                        <div class="stat-val warn">{{ speed_alerts_today }}</div>
+                    </div>
+                    <div class="stat-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                </div>
+                <div class="stat">
+                    <div>
+                        <div class="stat-label">Avg Rating</div>
+                        <div class="stat-val">{{ avg_rating }} ★</div>
+                    </div>
+                    <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
+                </div>
+            </div>
+            
+            <div class="grid-2">
+                <!-- Live Map Card -->
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-title">
+                            <i class="fa-solid fa-location-dot"></i> Live GPS Map
+                        </div>
+                        <span style="font-size:12px;color:var(--muted)">Updates every 5s</span>
+                    </div>
+                    <div id="map"></div>
+                </div>
+                
+                <!-- Side Cards Container -->
+                <div style="display:flex;flex-direction:column;gap:18px">
+                    
+                    <!-- Active Alerts Card -->
+                    <div class="card" style="flex:1">
+                        <div class="card-head">
+                            <div class="card-title">
+                                <i class="fa-solid fa-gauge-high"></i> Active Alerts
+                            </div>
+                        </div>
+                        {% if recent_alerts %}
+                            {% for a in recent_alerts %}
+                                <div style="display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--border);font-size:13px">
+                                    <i class="fa-solid fa-circle-exclamation" style="color:var(--danger)"></i>
+                                    <div style="flex:1">
+                                        <div style="font-weight:600">{{ a.device_id }}</div>
+                                        <div style="color:var(--danger);font-weight:600">{{ a.speed|floatformat:1 }} km/h</div>
+                                    </div>
+                                    <span style="font-size:11px;color:var(--muted)">{{ a.triggered_at|date:"H:i" }}</span>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty">
+                                <i class="fa-solid fa-circle-check" style="color:var(--green)"></i>
+                                <p>No active alerts</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Recent Feedback Card -->
+                    <div class="card" style="flex:1">
+                        <div class="card-head">
+                            <div class="card-title">
+                                <i class="fa-solid fa-star"></i> Recent Feedback
+                            </div>
+                        </div>
+                        {% if recent_feedback %}
+                            {% for fb in recent_feedback %}
+                                <div style="padding:11px 16px;border-bottom:1px solid var(--border);font-size:13px">
+                                    <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                                        <span style="font-weight:600">{{ fb.bus_id }}</span>
+                                        <span class="stars">
+                                            {% for i in "12345" %}
+                                                {% if forloop.counter <= fb.rating %}★{% else %}☆{% endif %}
+                                            {% endfor %}
+                                        </span>
+                                    </div>
+                                    <div style="color:var(--muted);font-size:12px">{{ fb.comment|truncatechars:55 }}</div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty">
+                                <i class="fa-regular fa-comment-dots"></i>
+                                <p>No feedback yet</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BUSES VIEW -->
+        <div id="page-buses" class="page">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-title"><i class="fa-solid fa-map"></i> Fleet Map</div>
+                    </div>
+                    <div id="map2"></div>
+                </div>
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-title"><i class="fa-solid fa-bus"></i> Bus Status</div>
+                    </div>
+                    <div id="bus-list">
+                        {% for bus in buses %}
+                            <div style="padding:14px 16px;border-bottom:1px solid var(--border)">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+                                    <span style="font-weight:700;font-size:15px">{{ bus.device_id }}</span>
+                                    <span class="badge {% if bus.speed > 60 %}red{% else %}green{% endif %}">
+                                        {{ bus.speed|floatformat:0 }} km/h
+                                    </span>
+                                </div>
+                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:12px;color:var(--muted)">
+                                    <span><i class="fa-solid fa-users" style="width:13px"></i> {{ bus.occupancy }} passengers</span>
+                                    <span><i class="fa-solid fa-clock" style="width:13px"></i> {{ bus.timestamp|date:"H:i:s" }}</span>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <div class="empty">
+                                <i class="fa-solid fa-satellite-dish"></i>
+                                <p>No GPS data yet</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRIPS VIEW -->
+        <div id="page-trips" class="page">
+            <div class="toolbar">
+                <div></div>
+                <button class="btn btn-primary" onclick="openModal('trip-modal')">
+                    <i class="fa-solid fa-plus"></i> Log New Trip
+                </button>
+            </div>
+            <div class="card">
+                <div class="tbl-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bus</th>
+                                <th>Route</th>
+                                <th>Departure</th>
+                                <th>Arrival</th>
+                                <th>Notes</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for trip in recent_trips %}
+                                <tr>
+                                    <td><span class="badge green">{{ trip.device_id }}</span></td>
+                                    <td style="font-weight:600">{{ trip.route_name|default:"—" }}</td>
+                                    <td style="color:var(--muted);font-size:12px">{{ trip.departure_time|date:"d M Y, H:i"|default:"—" }}</td>
+                                    <td style="color:var(--muted);font-size:12px">{{ trip.arrival_time|date:"d M Y, H:i"|default:"—" }}</td>
+                                    <td style="color:var(--muted);font-size:12px">{{ trip.notes|truncatechars:40|default:"—" }}</td>
+                                    <td>
+                                        <a href="{% url 'admin_trip_delete' trip.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Delete?')">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="empty">
+                                            <i class="fa-solid fa-clock-rotate-left"></i>
+                                            <p>No trips logged yet</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ALERTS VIEW -->
+        <div id="page-alerts" class="page">
+            <div class="toolbar">
+                <div></div>
+                <a href="{% url 'admin_alert_ack_all' %}" class="btn btn-warn" onclick="return confirm('Dismiss all?')">
+                    <i class="fa-solid fa-check-double"></i> Dismiss All
+                </a>
+            </div>
+            <div class="card">
+                <div class="tbl-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bus</th>
+                                <th>Speed</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for alert in recent_alerts %}
+                                <tr>
+                                    <td><span class="badge green">{{ alert.device_id }}</span></td>
+                                    <td>
+                                        <span class="badge red">
+                                            <i class="fa-solid fa-gauge-high"></i> {{ alert.speed|floatformat:1 }} km/h
+                                        </span>
+                                    </td>
+                                    <td style="font-size:12px;color:var(--muted)">{{ alert.triggered_at|date:"d M Y, H:i" }}</td>
+                                    <td>
+                                        <span class="badge {% if alert.acknowledged %}gray{% else %}red{% endif %}">
+                                            {% if alert.acknowledged %}Dismissed{% else %}Active{% endif %}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if not alert.acknowledged %}
+                                            <a href="{% url 'admin_alert_ack' alert.id %}" class="btn btn-warn btn-sm">
+                                                <i class="fa-solid fa-check"></i> Dismiss
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="empty">
+                                            <i class="fa-solid fa-circle-check" style="color:var(--green)"></i>
+                                            <p>No speed alerts</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- USERS VIEW -->
+        <div id="page-users" class="page">
+            <div class="toolbar">
+                <form method="GET" style="display:flex;gap:8px;flex:1">
+                    <div class="search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" name="q" placeholder="Search users…" value="{{ search }}">
+                    </div>
+                    <select name="role" class="fc" style="width:150px" onchange="this.form.submit()">
+                        <option value="">All roles</option>
+                        <option value="student" {% if role_filter == 'student' %}selected{% endif %}>Students</option>
+                        <option value="admin" {% if role_filter == 'admin' %}selected{% endif %}>Admins</option>
+                        <option value="driver" {% if role_filter == 'driver' %}selected{% endif %}>Drivers</option>
+                    </select>
+                    <button type="submit" class="btn btn-ghost">
+                        <i class="fa-solid fa-filter"></i>
+                    </button>
+                </form>
+            </div>
+            <div class="card">
+                <div class="tbl-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Joined</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for u in users %}
+                                <tr>
+                                    <td style="font-weight:600">{{ u.full_name|default:u.username }}</td>
+                                    <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)">{{ u.username }}</td>
+                                    <td>
+                                        <span class="badge {% if u.role == 'admin' %}blue{% elif u.role == 'driver' %}yellow{% else %}green{% endif %}">
+                                            {{ u.role }}
+                                        </span>
+                                    </td>
+                                    <td style="font-size:12px;color:var(--muted)">{{ u.date_joined|date:"d M Y" }}</td>
+                                    <td>
+                                        <span class="badge {% if u.is_active %}green{% else %}red{% endif %}">
+                                            {% if u.is_active %}Active{% else %}Inactive{% endif %}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div style="display:flex;gap:6px">
+                                            <button class="btn btn-ghost btn-sm" onclick="openEditModal({{ u.id }},'{{ u.full_name }}','{{ u.email }}','{{ u.role }}',{{ u.is_active|yesno:'true,false' }})">
+                                                <i class="fa-solid fa-pen"></i>
+                                            </button>
+                                            {% if u != request.user %}
+                                                <a href="{% url 'admin_user_delete' u.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Delete?')">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="empty">
+                                            <i class="fa-solid fa-users-slash"></i>
+                                            <p>No users found</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- FEEDBACK VIEW -->
+        <div id="page-feedback" class="page">
+            <div class="grid-3">
+                <div class="stat">
+                    <div>
+                        <div class="stat-label">Total Feedback</div>
+                        <div class="stat-val">{{ recent_feedback|length }}</div>
+                    </div>
+                    <div class="stat-icon"><i class="fa-solid fa-comments"></i></div>
+                </div>
+                <div class="stat">
+                    <div>
+                        <div class="stat-label">Average Rating</div>
+                        <div class="stat-val">{{ avg_rating }} ★</div>
+                    </div>
+                    <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
+                </div>
+                <div class="stat info">
+                    <div>
+                        <div class="stat-label">Drivers</div>
+                        <div class="stat-val">{{ driver_count }}</div>
+                    </div>
+                    <div class="stat-icon"><i class="fa-solid fa-id-card"></i></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="tbl-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Bus</th>
+                                <th>Rating</th>
+                                <th>Comment</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for fb in recent_feedback %}
+                                <tr>
+                                    <td style="font-weight:600">{{ fb.user.full_name|default:"Anonymous" }}</td>
+                                    <td><span class="badge green">{{ fb.bus_id }}</span></td>
+                                    <td class="stars">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= fb.rating %}★{% else %}☆{% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td style="color:var(--muted);font-size:12px;max-width:280px">{{ fb.comment }}</td>
+                                    <td style="font-size:11px;color:var(--muted)">{{ fb.submitted_at|date:"d M, H:i" }}</td>
+                                    <td>
+                                        <a href="{% url 'admin_feedback_delete' fb.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Delete?')">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="empty">
+                                            <i class="fa-regular fa-comment-dots"></i>
+                                            <p>No feedback yet</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- TRIP MODAL -->
+<div class="modal-bg" id="trip-modal">
+    <div class="modal">
+        <div class="modal-head">
+            <h2>
+                <i class="fa-solid fa-clock-rotate-left" style="color:var(--green);margin-right:8px"></i>
+                Log New Trip
+            </h2>
+            <button class="modal-close" onclick="closeModal('trip-modal')">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <form method="POST" action="{% url 'admin_trip_create' %}">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Bus</label>
+                    <select name="device_id" class="fc">
+                        <option>bus_01</option>
+                        <option>bus_02</option>
+                        <option>bus_03</option>
+                        <option>bus_04</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Route Name</label>
+                    <input type="text" name="route_name" class="fc" placeholder="e.g. Dharan to College">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Departure</label>
+                    <input type="datetime-local" name="departure_time" class="fc">
+                </div>
+                <div class="form-group">
+                    <label>Arrival</label>
+                    <input type="datetime-local" name="arrival_time" class="fc">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Notes</label>
+                <textarea name="notes" class="fc" placeholder="Any delays…"></textarea>
+            </div>
+            <div style="display:flex;gap:10px">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-check"></i> Save Trip
+                </button>
+                <button type="button" class="btn btn-ghost" onclick="closeModal('trip-modal')">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- EDIT USER MODAL -->
+<div class="modal-bg" id="edit-modal">
+    <div class="modal">
+        <div class="modal-head">
+            <h2>
+                <i class="fa-solid fa-pen" style="color:var(--green);margin-right:8px"></i>
+                Edit User
+            </h2>
+            <button class="modal-close" onclick="closeModal('edit-modal')">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <form method="POST" id="edit-form" action="">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="full_name" id="ef-name" class="fc">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" id="ef-email" class="fc">
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <select name="role" id="ef-role" class="fc">
+                    <option value="student">Student</option>
+                    <option value="admin">Admin</option>
+                    <option value="driver">Driver</option>
+                </select>
+            </div>
+            <div class="form-group" style="display:flex;align-items:center;gap:8px">
+                <input type="checkbox" name="is_active" id="ef-active" style="width:16px;height:16px">
+                <label for="ef-active" style="margin:0">Account active</label>
+            </div>
+            <div style="display:flex;gap:10px">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-check"></i> Save
+                </button>
+                <button type="button" class="btn btn-ghost" onclick="closeModal('edit-modal')">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    // --- Clock ---
+    function tick() {
+        document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-GB');
+    }
+    tick();
+    setInterval(tick, 1000);
+
+    // --- Page Navigation ---
+    const titles = {
+        dashboard: 'Dashboard Overview',
+        buses: 'Live Buses',
+        trips: 'Trip Logs',
+        alerts: 'Speed Alerts',
+        users: 'User Management',
+        feedback: 'Passenger Feedback'
+    };
+
+    function showPage(name, btn) {
+        // Hide all pages & remove active states
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        
+        // Show target page & set active state
+        document.getElementById('page-' + name).classList.add('active');
+        btn.classList.add('active');
+        document.getElementById('page-title').textContent = titles[name];
+        
+        // Lazy load map 2
+        if (name === 'buses' && !map2init) {
+            initMap2();
+        }
+    }
+
+    // --- Modals ---
+    function openModal(id) {
+        document.getElementById(id).classList.add('open');
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('open');
+    }
+
+    function openEditModal(id, name, email, role, active) {
+        document.getElementById('edit-form').action = `/manage/users/${id}/edit/`;
+        document.getElementById('ef-name').value = name;
+        document.getElementById('ef-email').value = email;
+        document.getElementById('ef-role').value = role;
+        document.getElementById('ef-active').checked = active;
+        openModal('edit-modal');
+    }
+
+    // Close modal when clicking outside
+    document.querySelectorAll('.modal-bg').forEach(bg => {
+        bg.addEventListener('click', e => {
+            if (e.target === bg) bg.classList.remove('open');
+        });
+    });
+
+    // --- Leaflet Map Configurations ---
+    const busIcon = L.divIcon({
+        html: '<div style="background:#1a7a42;color:white;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:13px;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,.3)"><i class="fa fa-bus"></i></div>',
+        className: '',
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
+    });
+
+    // --- Map 1 (Dashboard) ---
+    const map = L.map('map').setView([26.6646, 87.2748], 12);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '© CARTO',
+        maxZoom: 19
+    }).addTo(map);
+
+    const markers = {};
+
+    function fetchBuses() {
+        fetch('/api/location/')
+            .then(r => r.json())
+            .then(data => {
+                const buses = data.buses || [];
+                document.getElementById('stat-buses').textContent = buses.length + ' / 8';
+                
+                buses.forEach(b => {
+                    const pos = [b.lat, b.lng];
+                    const pop = `<b>${b.device_id}</b><br>${b.speed} km/h · ${b.occupancy} passengers`;
+                    
+                    if (markers[b.device_id]) {
+                        markers[b.device_id].setLatLng(pos).setPopupContent(pop);
+                    } else {
+                        markers[b.device_id] = L.marker(pos, { icon: busIcon })
+                            .addTo(map)
+                            .bindPopup(pop);
+                    }
+                });
+            })
+            .catch(() => {});
+    }
+
+    fetchBuses();
+    setInterval(fetchBuses, 5000);
+
+    // --- Map 2 (Buses Page - Lazy Loaded) ---
+    let map2init = false;
+
+    function initMap2() {
+        map2init = true;
+        const m2 = L.map('map2').setView([26.6646, 87.2748], 12);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '© CARTO',
+            maxZoom: 19
+        }).addTo(m2);
+
+        const mk2 = {};
+
+        function f2() {
+            fetch('/api/location/')
+                .then(r => r.json())
+                .then(data => {
+                    (data.buses || []).forEach(b => {
+                        const pos = [b.lat, b.lng];
+                        if (mk2[b.device_id]) {
+                            mk2[b.device_id].setLatLng(pos);
+                        } else {
+                            mk2[b.device_id] = L.marker(pos, { icon: busIcon })
+                                .addTo(m2)
+                                .bindPopup(`<b>${b.device_id}</b>`);
+                        }
+                    });
+                })
+                .catch(() => {});
+        }
+
+        f2();
+        setInterval(f2, 5000);
+    }
+</script>
+</body>
+</html>
