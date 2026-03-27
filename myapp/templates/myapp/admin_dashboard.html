@@ -121,7 +121,7 @@
         <button class="nav-btn" onclick="showPage('users',this)"><i class="fa-solid fa-users"></i> Users</button>
         <button class="nav-btn" onclick="showPage('feedback',this)"><i class="fa-solid fa-star"></i> Feedback</button>
         <div class="nav-sec">System</div>
-        <a class="nav-btn" href="{% url 'logout' %}"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+        <form method="POST" action="{% url 'logout' %}" style="margin:0">{% csrf_token %}<button type="submit" class="nav-btn" style="background:none;border:none;cursor:pointer;font-family:inherit;font-size:inherit"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></form>
     </div>
     <div class="sidebar-foot">
         <div class="avatar"><i class="fa-solid fa-user-tie"></i></div>
@@ -169,7 +169,7 @@
 
         <!-- ALERTS -->
         <div id="page-alerts" class="page">
-            <div class="toolbar"><div></div><button class="btn btn-warn" onclick="confirmAction(\'{% url \'admin_alert_ack_all\' %}\',\'Dismiss all active alerts?\')"><i class="fa-solid fa-check-double"></i> Dismiss All</a></div>
+            <div class="toolbar"><div></div><button class="btn btn-warn" data-url="{% url 'admin_alert_ack_all' %}" onclick="confirmAction(this.dataset.url,'Dismiss all active alerts?')"><i class="fa-solid fa-check-double"></i> Dismiss All</button></div>
             <div class="card"><div class="tbl-wrap"><table><thead><tr><th>Bus</th><th>Speed</th><th>Time</th><th>Status</th><th>Action</th></tr></thead><tbody>{% for alert in recent_alerts %}<tr><td><span class="badge green">{{ alert.device_id }}</span></td><td><span class="badge red"><i class="fa-solid fa-gauge-high"></i> {{ alert.speed|floatformat:1 }} km/h</span></td><td style="font-size:12px;color:var(--muted)">{{ alert.triggered_at|date:"d M Y, H:i" }}</td><td><span class="badge {% if alert.acknowledged %}gray{% else %}red{% endif %}">{% if alert.acknowledged %}Dismissed{% else %}Active{% endif %}</span></td><td>{% if not alert.acknowledged %}<button class=\"btn btn-warn btn-sm\" onclick=\"ajaxPost('{% url 'admin_alert_ack' alert.id %}')\"><i class=\"fa-solid fa-check\"></i> Dismiss</button>{% endif %}</td></tr>{% empty %}<tr><td colspan="5"><div class="empty"><i class="fa-solid fa-circle-check" style="color:var(--green)"></i><p>No speed alerts</p></div></td></tr>{% endfor %}</tbody></table></div></div>
         </div>
 
