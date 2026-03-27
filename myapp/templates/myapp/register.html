@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SARP-T — Register</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --green: #1a8a4a; --green-light: #2eb85c; --green-pale: #f0fdf6;
+            --text: #1a2e1f; --muted: #6b7c72; --border: #d1e8d9; --white: #ffffff;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--green-pale); min-height: 100vh;
+            display: grid; place-items: center; padding: 20px;
+            position: relative; overflow: hidden;
+        }
+        body::before, body::after {
+            content: ''; position: fixed; border-radius: 50%;
+            opacity: 0.06; background: var(--green);
+        }
+        body::before { width: 600px; height: 600px; top: -200px; right: -150px; }
+        body::after  { width: 400px; height: 400px; bottom: -150px; left: -100px; }
+        .card {
+            background: var(--white); width: 100%; max-width: 420px;
+            border-radius: 20px; padding: 44px 36px;
+            box-shadow: 0 4px 32px rgba(26,138,74,0.10), 0 1px 4px rgba(0,0,0,0.04);
+            position: relative; z-index: 1;
+        }
+        .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; }
+        .logo-icon { width: 38px; height: 38px; background: var(--green); border-radius: 10px; display: grid; place-items: center; color: white; font-size: 18px; }
+        .logo-name { font-size: 20px; font-weight: 700; color: var(--text); }
+        .logo-name span { color: var(--green-light); }
+        h1 { font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+        .subtitle { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+        .messages { margin-bottom: 16px; }
+        .msg-error { background: #fff5f5; border: 1px solid #fca5a5; color: #b91c1c; padding: 10px 14px; border-radius: 8px; font-size: 13px; }
+        .field { margin-bottom: 16px; }
+        .field label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+        .input-wrap { position: relative; }
+        .input-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--green-light); font-size: 15px; pointer-events: none; }
+        .input-wrap input {
+            width: 100%; padding: 13px 14px 13px 42px;
+            border: 1.5px solid var(--border); border-radius: 10px;
+            font-size: 14px; font-family: inherit; color: var(--text);
+            background: var(--green-pale); outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-wrap input:focus { border-color: var(--green-light); box-shadow: 0 0 0 3px rgba(46,184,92,0.12); background: white; }
+        .input-wrap input::placeholder { color: #a8bdb1; }
+        .pw-wrap { position: relative; }
+        .pw-wrap input { padding-right: 42px; }
+        .pw-eye { position: absolute; right: 13px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); font-size: 15px; padding: 0; transition: color 0.15s; }
+        .pw-eye:hover { color: var(--green); }
+        .btn { width: 100%; padding: 14px; background: var(--green); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
+        .btn:hover { background: #15703c; }
+        .footer { text-align: center; margin-top: 22px; font-size: 13px; color: var(--muted); }
+        .footer a { color: var(--green); font-weight: 600; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="logo">
+        <div class="logo-icon"><i class="fa-solid fa-leaf"></i></div>
+        <div class="logo-name">SARP<span>-T</span></div>
+    </div>
+
+    <h1>Create account</h1>
+    <p class="subtitle">Join the Itahari Int. College transport system</p>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="msg-error"><i class="fa-solid fa-circle-exclamation"></i> {{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'register' %}">
+        {% csrf_token %}
+        <div class="field">
+            <label>Full Name</label>
+            <div class="input-wrap">
+                <i class="fa-regular fa-user"></i>
+                <input type="text" name="full_name" placeholder="Your full name" required autofocus>
+            </div>
+        </div>
+        <div class="field">
+            <label>Username</label>
+            <div class="input-wrap">
+                <i class="fa-regular fa-id-badge"></i>
+                <input type="text" name="username" placeholder="Choose a username" required>
+            </div>
+        </div>
+        <div class="field">
+            <label>Password</label>
+            <div class="input-wrap pw-wrap">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" name="password" id="reg-pw-input" placeholder="Create a password" required>
+                <button type="button" class="pw-eye" onclick="toggleRegPw()" tabindex="-1">
+                    <i class="fa-regular fa-eye" id="reg-pw-eye-icon"></i>
+                </button>
+            </div>
+        </div>
+        <button type="submit" class="btn">Create Account</button>
+    </form>
+
+    <div class="footer">
+        Already have an account? <a href="{% url 'login' %}">Sign in</a>
+    </div>
+</div>
+<script>
+function toggleRegPw() {
+    const inp = document.getElementById('reg-pw-input');
+    const icon = document.getElementById('reg-pw-eye-icon');
+    if (inp.type === 'password') {
+        inp.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        inp.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+</script>
+</body>
+</html>

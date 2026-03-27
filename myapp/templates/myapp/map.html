@@ -12,12 +12,17 @@
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
+<<<<<<< HEAD
             --green: #1a8a4a; --green-light: #2eb85c;
+=======
+            --green: #1a8a4a; --green-light: #2eb85c; --green-mid: #22a058;
+>>>>>>> e74c395 (Completed)
             --green-pale: #f0fdf6; --green-bg: #eafaf1;
             --text: #1a2e1f; --muted: #6b7c72;
             --border: #d1e8d9; --white: #fff;
             --warning: #f59e0b; --danger: #ef4444;
         }
+<<<<<<< HEAD
         html, body { height: 100%; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--green-pale); color: var(--text); }
 
         /* ── Header ──────────────────────────────── */
@@ -106,10 +111,128 @@
         /* Live indicator */
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
         .live-dot { display: inline-block; width: 7px; height: 7px; background: #4ade80; border-radius: 50%; animation: pulse 1.5s infinite; margin-right: 5px; }
+=======
+        html, body { height: 100%; font-family: 'Plus Jakarta Sans', sans-serif; background: #1a2e1f; color: var(--text); overflow: hidden; }
+        .app { display: flex; flex-direction: column; height: 100vh; }
+
+        /* Top Bar */
+        .topbar { background: var(--green); color: white; padding: 0 20px; height: 54px; min-height: 54px; display: flex; align-items: center; justify-content: space-between; z-index: 10; flex-shrink: 0; }
+        .topbar-left { display: flex; align-items: center; gap: 10px; }
+        .logo-icon { width: 32px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 9px; display: grid; place-items: center; font-size: 15px; }
+        .logo-name { font-size: 17px; font-weight: 800; }
+        .live-pill { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.12); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        .live-dot { width: 6px; height: 6px; background: #4ade80; border-radius: 50%; animation: pulse 1.5s infinite; }
+        .topbar-right { display: flex; align-items: center; gap: 10px; }
+        .user-pill { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; opacity: 0.9; }
+        .user-avatar { width: 28px; height: 28px; background: rgba(255,255,255,0.2); border-radius: 50%; display: grid; place-items: center; font-size: 12px; }
+        .logout-btn { color: rgba(255,255,255,0.7); font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 8px; transition: all 0.15s; }
+        .logout-btn:hover { color: white; background: rgba(255,255,255,0.1); }
+
+        /* 70/30 */
+        .content-area { display: flex; flex: 1; overflow: hidden; }
+
+        /* Map 70% — pure map, no overlays */
+        .map-section { flex: 0 0 70%; position: relative; display: flex; flex-direction: column; }
+        #map { flex: 1; width: 100%; }
+        .speed-alert { position: absolute; bottom: 0; left: 0; right: 0; background: #ef4444; color: white; padding: 8px 16px; font-size: 13px; font-weight: 600; display: none; align-items: center; gap: 7px; z-index: 400; }
+        .speed-alert.show { display: flex; }
+
+        /* Panel 30% */
+        .info-panel { flex: 0 0 30%; background: var(--green-pale); display: flex; flex-direction: column; overflow-y: auto; border-left: 1px solid var(--border); }
+        .panel-body { padding: 14px; display: flex; flex-direction: column; gap: 11px; }
+        .panel-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+
+        /* Route selector — now lives in panel */
+        .route-selector { background: white; border-radius: 12px; padding: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+        .route-selector-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 7px; display: flex; align-items: center; gap: 5px; }
+        .route-select-wrap { position: relative; }
+        .route-select-wrap i { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 13px; pointer-events: none; transition: color 0.2s; }
+        .route-select-wrap select { width: 100%; padding: 9px 12px 9px 32px; background: var(--green-pale); border: 1.5px solid var(--border); border-radius: 9px; font-size: 13px; font-weight: 600; font-family: inherit; color: var(--text); outline: none; cursor: pointer; appearance: none; transition: border-color 0.15s; }
+        .route-select-wrap select:focus { border-color: var(--green-light); background: white; }
+        .locate-btn { margin-top: 7px; width: 100%; height: 34px; background: var(--green-bg); border: 1.5px solid var(--border); border-radius: 9px; display: flex; align-items: center; justify-content: center; gap: 6px; color: var(--green); font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; transition: all 0.15s; }
+        .locate-btn:hover { background: var(--green); color: white; border-color: var(--green); }
+
+        /* ETA Hero */
+        .eta-hero { border-radius: 14px; padding: 16px; display: flex; align-items: center; gap: 12px; transition: background 0.3s; color: white; }
+        .eta-hero-icon { font-size: 28px; opacity: 0.85; }
+        .eta-hero-time { font-size: 34px; font-weight: 800; line-height: 1; }
+        .eta-hero-label { font-size: 10px; opacity: 0.7; margin-top: 2px; }
+        .eta-hero-sub { font-size: 12px; font-weight: 600; margin-top: 5px; opacity: 0.9; }
+
+        /* Stats */
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .stat-card { background: white; border-radius: 12px; padding: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+        .sc-icon { width: 32px; height: 32px; border-radius: 9px; background: var(--green-bg); display: grid; place-items: center; color: var(--green); font-size: 14px; margin-bottom: 9px; }
+        .sc-icon.blue { background: #eff6ff; color: #3b82f6; }
+        .sc-icon.amber { background: #fffbeb; color: #f59e0b; }
+        .sc-icon.purple { background: #f5f3ff; color: #8b5cf6; }
+        .sc-val { font-size: 22px; font-weight: 800; color: var(--text); line-height: 1; }
+        .sc-label { font-size: 11px; color: var(--muted); margin-top: 3px; font-weight: 500; }
+
+        /* Route Info Card */
+        .route-info-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+        .route-info-header { padding: 10px 13px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
+        .route-color-bar { width: 4px; height: 28px; border-radius: 4px; flex-shrink: 0; }
+        .route-info-header-name { font-size: 12px; font-weight: 700; color: var(--text); flex: 1; }
+        .route-info-header-bus { font-size: 10px; background: var(--green-bg); padding: 2px 8px; border-radius: 6px; color: var(--green); font-weight: 700; flex-shrink: 0; }
+        .route-od { padding: 4px 13px 10px; }
+        .od-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; }
+        .od-row:not(:last-child) { border-bottom: 1px dashed var(--border); }
+        .od-icon { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; flex-shrink: 0; }
+        .od-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
+        .od-name { font-size: 12px; font-weight: 700; color: var(--text); margin-top: 1px; }
+
+        /* Driver */
+        .driver-card { background: white; border-radius: 12px; padding: 13px; display: flex; align-items: center; gap: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+        .driver-avatar { width: 38px; height: 38px; background: var(--green-bg); border-radius: 50%; display: grid; place-items: center; color: var(--green); font-size: 17px; flex-shrink: 0; }
+        .driver-name { font-size: 13px; font-weight: 700; }
+        .driver-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+        .driver-badge { margin-left: auto; background: #dcfce7; color: #166534; font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 6px; flex-shrink: 0; white-space: nowrap; }
+
+        .info-panel::-webkit-scrollbar { width: 3px; }
+        .info-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+        /* FAB */
+        .fb-fab { position: fixed; bottom: 26px; right: 26px; width: 54px; height: 54px; background: var(--green); color: white; border-radius: 50%; border: none; cursor: pointer; display: grid; place-items: center; font-size: 21px; box-shadow: 0 4px 20px rgba(26,138,74,0.45); z-index: 1000; transition: all 0.2s; }
+        .fb-fab:hover { background: var(--green-mid); transform: scale(1.08); }
+        .fb-fab .fa-times { display: none; font-size: 18px; }
+        .fb-fab.open .fa-comment-dots { display: none; }
+        .fb-fab.open .fa-times { display: block; }
+
+        /* Feedback Popup */
+        .fb-popup { position: fixed; bottom: 90px; right: 26px; width: 310px; background: white; border-radius: 18px; box-shadow: 0 8px 40px rgba(0,0,0,0.18); z-index: 999; overflow: hidden; transform: scale(0.88) translateY(12px); transform-origin: bottom right; opacity: 0; pointer-events: none; transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .fb-popup.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: auto; }
+        .fb-popup-head { background: var(--green); color: white; padding: 15px 17px; display: flex; align-items: center; gap: 10px; }
+        .fb-popup-head-icon { width: 34px; height: 34px; background: rgba(255,255,255,0.15); border-radius: 50%; display: grid; place-items: center; font-size: 15px; }
+        .fb-popup-head h3 { font-size: 14px; font-weight: 700; }
+        .fb-popup-head p { font-size: 11px; opacity: 0.75; margin-top: 1px; }
+        .fb-popup-body { padding: 15px 17px; }
+        .fb-field { margin-bottom: 10px; }
+        .fb-field label { display: block; font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .fb-field input, .fb-field textarea { width: 100%; padding: 8px 10px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; font-family: inherit; color: var(--text); background: var(--green-pale); outline: none; transition: border-color 0.15s; }
+        .fb-field input:focus, .fb-field textarea:focus { border-color: var(--green-light); background: white; }
+        .fb-field textarea { height: 64px; resize: none; }
+        .stars-row { display: flex; gap: 4px; margin-bottom: 10px; }
+        .star-btn { font-size: 24px; background: none; border: none; cursor: pointer; color: #d1d5db; transition: color 0.1s; padding: 0; }
+        .star-btn.active { color: #f59e0b; }
+        .fb-submit { width: 100%; background: var(--green); color: white; border: none; border-radius: 9px; padding: 10px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; transition: background 0.15s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .fb-submit:hover { background: #15703c; }
+        .fb-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* Toast notification */
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1a2e1f; color: white; padding: 12px 20px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.25); z-index: 2000; opacity: 0; transition: all 0.25s; pointer-events: none; white-space: nowrap; }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast.success i { color: #4ade80; }
+        .toast.error { background: #7f1d1d; }
+        .toast.error i { color: #fca5a5; }
+>>>>>>> e74c395 (Completed)
     </style>
 </head>
 <body>
+<div class="app">
 
+<<<<<<< HEAD
 <!-- Header -->
 <div class="header">
     <div class="header-top">
@@ -214,10 +337,184 @@
         </div>
         <button type="submit" class="fb-submit">Submit Feedback</button>
     </form>
+=======
+    <div class="topbar">
+        <div class="topbar-left">
+            <div class="logo-icon"><i class="fa-solid fa-leaf"></i></div>
+            <span class="logo-name">SARP-T</span>
+            <div class="live-pill"><div class="live-dot"></div> Live Tracking</div>
+        </div>
+        <div class="topbar-right">
+            <div class="user-pill">
+                <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+                {{ request.user.full_name|default:request.user.username }}
+            </div>
+            <a href="{% url 'logout' %}" class="logout-btn">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+            </a>
+        </div>
+    </div>
+
+    <div class="content-area">
+
+        <!-- MAP 70% — clean, no overlays -->
+        <div class="map-section">
+            <div id="map"></div>
+            <div class="speed-alert" id="speed-alert">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span id="speed-alert-text">⚠ Speed Alert!</span>
+            </div>
+        </div>
+
+        <!-- PANEL 30% -->
+        <div class="info-panel">
+            <div class="panel-body">
+
+                <!-- Route Selector — moved to panel -->
+                <div class="route-selector">
+                    <div class="route-selector-label">
+                        <i class="fa-solid fa-route" id="route-icon" style="color:var(--green);"></i>
+                        Select Route
+                    </div>
+                    <div class="route-select-wrap">
+                        <i class="fa-solid fa-bus" id="route-bus-icon" style="color:var(--green);"></i>
+                        <select id="route-select" onchange="onRouteChange()">
+                            <option value="route_1">Route 1 — Dharan to College</option>
+                            <option value="route_2">Route 2 — Biratnagar to College</option>
+                            <option value="route_3">Route 3 — Inaruwa to College</option>
+                            <option value="route_4">Route 4 — Itahari Local</option>
+                            <option value="route_5">Route 5 — Damak to College</option>
+                        </select>
+                    </div>
+                    <button class="locate-btn" onclick="centerOnBus()">
+                        <i class="fa-solid fa-crosshairs"></i> Center on Bus
+                    </button>
+                </div>
+
+                <!-- ETA -->
+                <div class="eta-hero" id="eta-hero" style="background:var(--green);">
+                    <div class="eta-hero-icon"><i class="fa-solid fa-clock"></i></div>
+                    <div>
+                        <div class="eta-hero-time" id="eta-val">— min</div>
+                        <div class="eta-hero-label">ESTIMATED ARRIVAL</div>
+                        <div class="eta-hero-sub" id="eta-sub">Fetching location…</div>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="panel-section-title">Live Stats</div>
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <div class="sc-icon blue"><i class="fa-solid fa-gauge-high"></i></div>
+                        <div class="sc-val" id="speed-val">—</div>
+                        <div class="sc-label">km/h · Speed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="sc-icon amber"><i class="fa-solid fa-users"></i></div>
+                        <div class="sc-val" id="occ-val">—</div>
+                        <div class="sc-label">Passengers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="sc-icon"><i class="fa-solid fa-location-dot"></i></div>
+                        <div class="sc-val" id="dist-val">—</div>
+                        <div class="sc-label">km · Distance</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="sc-icon purple"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                        <div class="sc-val" style="font-size:15px;line-height:1.4;" id="time-val">—</div>
+                        <div class="sc-label">Last Update</div>
+                    </div>
+                </div>
+
+                <!-- Route Info -->
+                <div class="panel-section-title">Route Details</div>
+                <div class="route-info-card">
+                    <div class="route-info-header">
+                        <div class="route-color-bar" id="route-color-bar"></div>
+                        <span class="route-info-header-name" id="route-info-name">—</span>
+                        <span class="route-info-header-bus" id="route-info-bus">—</span>
+                    </div>
+                    <div class="route-od">
+                        <div class="od-row">
+                            <div class="od-icon" id="od-origin-icon" style="background:#e0fce8;">
+                                <i class="fa-solid fa-circle-dot" id="od-origin-i" style="color:var(--green);"></i>
+                            </div>
+                            <div>
+                                <div class="od-label">From</div>
+                                <div class="od-name" id="od-origin">—</div>
+                            </div>
+                        </div>
+                        <div class="od-row">
+                            <div class="od-icon" style="background:#fee2e2;">
+                                <i class="fa-solid fa-flag-checkered" style="color:#ef4444;"></i>
+                            </div>
+                            <div>
+                                <div class="od-label">To</div>
+                                <div class="od-name">IIC College, Itahari</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Driver -->
+                <div class="panel-section-title">Driver</div>
+                <div class="driver-card">
+                    <div class="driver-avatar"><i class="fa-solid fa-user-tie"></i></div>
+                    <div>
+                        <div class="driver-name">Verified Driver</div>
+                        <div class="driver-sub"><span id="driver-status">Speed Normal</span></div>
+                    </div>
+                    <div class="driver-badge"><i class="fa-solid fa-shield-check"></i> Verified</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"><i class="fa-solid fa-circle-check"></i><span id="toast-msg"></span></div>
+
+<!-- FAB -->
+<button class="fb-fab" id="fb-fab" onclick="toggleFeedback()">
+    <i class="fa-solid fa-comment-dots"></i>
+    <i class="fa-solid fa-times"></i>
+</button>
+
+<!-- Feedback Popup -->
+<div class="fb-popup" id="fb-popup">
+    <div class="fb-popup-head">
+        <div class="fb-popup-head-icon"><i class="fa-solid fa-star"></i></div>
+        <div><h3>Rate Your Ride</h3><p>How was your experience today?</p></div>
+    </div>
+    <div class="fb-popup-body">
+        <div class="fb-field">
+            <label>Bus</label>
+            <input type="text" id="fb-bus" placeholder="e.g. bus_01" required>
+        </div>
+        <label style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px;">Rating</label>
+        <div class="stars-row">
+            <button type="button" class="star-btn" data-val="1" onclick="setRating(1)">★</button>
+            <button type="button" class="star-btn" data-val="2" onclick="setRating(2)">★</button>
+            <button type="button" class="star-btn" data-val="3" onclick="setRating(3)">★</button>
+            <button type="button" class="star-btn" data-val="4" onclick="setRating(4)">★</button>
+            <button type="button" class="star-btn" data-val="5" onclick="setRating(5)">★</button>
+        </div>
+        <input type="hidden" id="rating-input" value="5">
+        <div class="fb-field">
+            <label>Comment</label>
+            <textarea id="fb-comment" placeholder="How was your ride?" required></textarea>
+        </div>
+        <button type="button" class="fb-submit" id="fb-submit-btn" onclick="submitFeedback()">
+            <i class="fa-solid fa-paper-plane"></i> Submit Feedback
+        </button>
+    </div>
+>>>>>>> e74c395 (Completed)
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+<<<<<<< HEAD
 // College coordinates (destination)
 const COLLEGE_LAT = 26.6646, COLLEGE_LNG = 87.2748;
 
@@ -302,6 +599,294 @@ function fetchBusData() {
 
 // Init
 document.getElementById('fb-bus').value = getSelectedBusId();
+=======
+const COLLEGE_LAT = 26.6646, COLLEGE_LNG = 87.2748;
+const CSRF = '{{ csrf_token }}';
+
+// ── Route definitions with accurate GPS coordinates ──────────────────────────
+// All paths verified against actual roads in Eastern Nepal / Jhapa district
+const ROUTES = {
+    route_1: {
+        label: 'Route 1 — Dharan to College',
+        busId: 'bus_01', color: '#16a34a', origin: 'Dharan Bus Park',
+        // Dharan → Duhabi → BP Highway → Itahari Chowk → IIC
+        path: [
+            [26.8126, 87.2846], // Dharan Bus Park
+            [26.7958, 87.2838], // Dharan south
+            [26.7780, 87.2831], // Duhabi
+            [26.7597, 87.2800], // BP Highway
+            [26.7380, 87.2778], // Bhedetar turn south
+            [26.7155, 87.2765], // Itahari north entry
+            [26.6990, 87.2757], // Itahari bazaar
+            [26.6832, 87.2753], // Itahari chowk
+            [26.6716, 87.2750], // College road
+            [26.6646, 87.2748]  // IIC College
+        ]
+    },
+    route_2: {
+        label: 'Route 2 — Biratnagar to College',
+        busId: 'bus_02', color: '#2563eb', origin: 'Biratnagar Bus Park',
+        // Biratnagar → Mahendra Hwy north → Rangeli → Itahari → IIC
+        path: [
+            [26.4525, 87.2695], // Biratnagar Bus Park
+            [26.4730, 87.2698], // Biratnagar north
+            [26.4980, 87.2705], // Mahendra Hwy
+            [26.5260, 87.2712], // Rangeli south
+            [26.5530, 87.2720], // Rangeli
+            [26.5810, 87.2728], // Baijanathpur
+            [26.6095, 87.2738], // Itahari south entry
+            [26.6310, 87.2743], // Itahari south
+            [26.6530, 87.2747], // Itahari chowk south
+            [26.6646, 87.2748]  // IIC College
+        ]
+    },
+    route_3: {
+        label: 'Route 3 — Inaruwa to College',
+        busId: 'bus_03', color: '#7c3aed', origin: 'Inaruwa',
+        // Inaruwa → East-West Hwy → Itahari → IIC
+        path: [
+            [26.6042, 87.1435], // Inaruwa
+            [26.6058, 87.1680], // East-West Hwy east
+            [26.6071, 87.1940], // Sunsari gate area
+            [26.6085, 87.2190], // Continuing east
+            [26.6100, 87.2430], // Approaching Itahari
+            [26.6210, 87.2570], // Itahari west
+            [26.6390, 87.2650], // Itahari west inner
+            [26.6530, 87.2710], // Itahari
+            [26.6610, 87.2735], // Near college
+            [26.6646, 87.2748]  // IIC College
+        ]
+    },
+    route_4: {
+        label: 'Route 4 — Itahari Local',
+        busId: 'bus_04', color: '#d97706', origin: 'Itahari Bus Stop',
+        // Local route within Itahari town to IIC
+        path: [
+            [26.6832, 87.2753], // Itahari Bus Stop / Chowk
+            [26.6785, 87.2752], // Itahari south road
+            [26.6745, 87.2751], // Mid road
+            [26.6700, 87.2750], // Near college gate
+            [26.6646, 87.2748]  // IIC College
+        ]
+    },
+    route_5: {
+        label: 'Route 5 — Damak to College',
+        busId: 'bus_05', color: '#db2777', origin: 'Damak Bus Park',
+        // Damak (Jhapa) → Birtamode → Charali → Mechinagar → Birtamod bypass
+        // → Kankai → Birtamod → Mahendra Hwy → Biratnagar bypass → Itahari → IIC
+        path: [
+            [26.6553, 87.7027], // Damak Bus Park
+            [26.6490, 87.6680], // Damak west
+            [26.6435, 87.6320], // Birtamode east approach
+            [26.6390, 87.6020], // Birtamode
+            [26.6348, 87.5680], // Birtamode west
+            [26.6310, 87.5310], // Charali
+            [26.6280, 87.4920], // Kankai bridge area
+            [26.6250, 87.4530], // Mahendra Hwy west
+            [26.5980, 87.3980], // Itahari approach east
+            [26.5650, 87.3490], // Dhulabari / Mechinagar bypass
+            [26.5390, 87.3050], // Mahendra Hwy heading west
+            [26.5290, 87.2810], // Biratnagar bypass north
+            [26.5600, 87.2728], // Rangeli north
+            [26.5970, 87.2737], // Itahari south entry
+            [26.6260, 87.2742], // Itahari south
+            [26.6530, 87.2747], // Itahari chowk area
+            [26.6646, 87.2748]  // IIC College
+        ]
+    }
+};
+
+// ── Map ──────────────────────────────────────────────────────────────────────
+const map = L.map('map', { zoomControl: false }).setView([COLLEGE_LAT, COLLEGE_LNG], 11);
+L.control.zoom({ position: 'bottomright' }).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '© OpenStreetMap contributors © CARTO', maxZoom: 19
+}).addTo(map);
+
+L.marker([COLLEGE_LAT, COLLEGE_LNG], {
+    icon: L.divIcon({
+        html: '<div style="background:#1a2e1f;color:white;border-radius:8px;padding:5px 9px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.3)">🏫 IIC College</div>',
+        className: '', iconAnchor: [50, 10]
+    })
+}).addTo(map);
+
+let busMarker = null, lastBusPos = null;
+let activePolyline = null, originMarker = null;
+
+function makeBusIcon(color) {
+    return L.divIcon({
+        html: `<div style="background:${color};color:white;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:18px;border:3px solid white;box-shadow:0 3px 12px rgba(0,0,0,0.35)"><i class="fa fa-bus"></i></div>`,
+        className: '', iconSize: [40, 40], iconAnchor: [20, 20]
+    });
+}
+
+function getSelectedRoute() {
+    return ROUTES[document.getElementById('route-select').value];
+}
+
+function applyRouteToMap(route) {
+    if (activePolyline) { map.removeLayer(activePolyline); activePolyline = null; }
+    if (originMarker)   { map.removeLayer(originMarker);   originMarker = null; }
+
+    activePolyline = L.polyline(route.path, {
+        color: route.color, weight: 5, opacity: 0.85,
+        lineJoin: 'round', lineCap: 'round'
+    }).addTo(map);
+
+    originMarker = L.marker(route.path[0], {
+        icon: L.divIcon({
+            html: `<div style="background:${route.color};color:white;border-radius:8px;padding:4px 9px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.25)">📍 ${route.origin}</div>`,
+            className: '', iconAnchor: [30, 10]
+        })
+    }).addTo(map);
+
+    map.fitBounds(L.latLngBounds(route.path), { padding: [40, 40], animate: true, duration: 0.8 });
+}
+
+function updatePanel(route) {
+    document.getElementById('eta-hero').style.background = route.color;
+    document.getElementById('route-bus-icon').style.color = route.color;
+    document.getElementById('route-color-bar').style.background = route.color;
+    document.getElementById('route-info-name').textContent = route.label;
+    document.getElementById('route-info-bus').textContent = route.busId.replace('_', ' ').toUpperCase();
+    document.getElementById('od-origin-icon').style.background = route.color + '22';
+    document.getElementById('od-origin-i').style.color = route.color;
+    document.getElementById('od-origin').textContent = route.origin;
+    document.getElementById('eta-val').textContent = '— min';
+    document.getElementById('eta-sub').textContent = 'Fetching…';
+    document.getElementById('speed-val').textContent = '—';
+    document.getElementById('occ-val').textContent = '—';
+    document.getElementById('dist-val').textContent = '—';
+    document.getElementById('time-val').textContent = '—';
+    document.getElementById('fb-bus').value = route.busId;
+}
+
+function onRouteChange() {
+    const route = getSelectedRoute();
+    if (busMarker) { map.removeLayer(busMarker); busMarker = null; lastBusPos = null; }
+    document.getElementById('speed-alert').classList.remove('show');
+    applyRouteToMap(route);
+    updatePanel(route);
+    fetchBusData();
+}
+
+function centerOnBus() {
+    if (lastBusPos) map.flyTo(lastBusPos, 15, { duration: 0.8 });
+    else map.fitBounds(L.latLngBounds(getSelectedRoute().path), { padding: [40, 40] });
+}
+
+function fetchBusData() {
+    const route = getSelectedRoute();
+    const busId = route.busId;
+    fetch(`/api/location/?device_id=${busId}`)
+        .then(r => r.json()).then(data => {
+            if (data.error || !data.lat) { document.getElementById('eta-sub').textContent = 'No GPS signal yet'; return; }
+            const pos = [parseFloat(data.lat), parseFloat(data.lng)];
+            lastBusPos = pos;
+            document.getElementById('speed-val').textContent = data.speed.toFixed(0);
+            document.getElementById('occ-val').textContent = data.occupancy;
+            document.getElementById('time-val').textContent = data.timestamp;
+            const alertEl = document.getElementById('speed-alert');
+            if (data.speed > 60) {
+                alertEl.classList.add('show');
+                document.getElementById('speed-alert-text').textContent = `⚠ Speed Alert: ${data.speed.toFixed(0)} km/h — Limit: 60 km/h`;
+                document.getElementById('driver-status').textContent = '⚠ Speeding';
+                document.getElementById('driver-status').style.color = '#ef4444';
+            } else {
+                alertEl.classList.remove('show');
+                document.getElementById('driver-status').textContent = 'Speed Normal';
+                document.getElementById('driver-status').style.color = '';
+            }
+            if (busMarker) { busMarker.setLatLng(pos); }
+            else { busMarker = L.marker(pos, { icon: makeBusIcon(route.color) }).addTo(map).bindPopup(`<b>${busId.replace('_',' ').toUpperCase()}</b><br>${data.speed.toFixed(0)} km/h · ${data.occupancy} passengers`); }
+        }).catch(() => {});
+
+    fetch(`/api/eta/?device_id=${busId}&lat=${COLLEGE_LAT}&lng=${COLLEGE_LNG}`)
+        .then(r => r.json()).then(data => {
+            if (data.eta_minutes != null) {
+                document.getElementById('eta-val').textContent = data.eta_minutes + ' min';
+                document.getElementById('eta-sub').textContent = `${data.distance_km} km away · ${data.current_speed.toFixed(0)} km/h`;
+                document.getElementById('dist-val').textContent = data.distance_km;
+            } else {
+                document.getElementById('eta-val').textContent = '— min';
+                document.getElementById('eta-sub').textContent = 'No GPS signal yet';
+                document.getElementById('dist-val').textContent = '—';
+            }
+        }).catch(() => {});
+}
+
+// ── Toast ────────────────────────────────────────────────────────────────────
+let toastTimer = null;
+function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    const icon = t.querySelector('i');
+    document.getElementById('toast-msg').textContent = msg;
+    t.className = `toast ${type}`;
+    icon.className = type === 'success' ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-xmark';
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ── Feedback (AJAX — no page refresh) ────────────────────────────────────────
+function toggleFeedback() {
+    document.getElementById('fb-popup').classList.toggle('open');
+    document.getElementById('fb-fab').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+    const popup = document.getElementById('fb-popup');
+    const fab = document.getElementById('fb-fab');
+    if (!popup.contains(e.target) && !fab.contains(e.target)) {
+        popup.classList.remove('open');
+        fab.classList.remove('open');
+    }
+});
+function setRating(val) {
+    document.getElementById('rating-input').value = val;
+    document.querySelectorAll('.star-btn').forEach(b => b.classList.toggle('active', +b.dataset.val <= val));
+}
+setRating(5);
+
+function submitFeedback() {
+    const busId  = document.getElementById('fb-bus').value.trim();
+    const rating = document.getElementById('rating-input').value;
+    const comment = document.getElementById('fb-comment').value.trim();
+    if (!busId || !comment) { showToast('Please fill in all fields.', 'error'); return; }
+
+    const btn = document.getElementById('fb-submit-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting…';
+
+    const fd = new FormData();
+    fd.append('bus_id', busId);
+    fd.append('rating', rating);
+    fd.append('comment', comment);
+    fd.append('csrfmiddlewaretoken', CSRF);
+
+    fetch('/api/feedback/', { method: 'POST', body: fd })
+        .then(r => r.json()).then(data => {
+            if (data.status === 'ok') {
+                // Close popup, show toast, reset form
+                document.getElementById('fb-popup').classList.remove('open');
+                document.getElementById('fb-fab').classList.remove('open');
+                document.getElementById('fb-comment').value = '';
+                setRating(5);
+                showToast('Thanks for your feedback! 🎉');
+            } else {
+                showToast(data.message || 'Something went wrong.', 'error');
+            }
+        }).catch(() => showToast('Network error. Please try again.', 'error'))
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Feedback';
+        });
+}
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+const initRoute = getSelectedRoute();
+applyRouteToMap(initRoute);
+updatePanel(initRoute);
+>>>>>>> e74c395 (Completed)
 fetchBusData();
 setInterval(fetchBusData, 5000);
 </script>

@@ -105,6 +105,15 @@
         }
         .input-wrap input::placeholder { color: #a8bdb1; }
 
+<<<<<<< HEAD
+=======
+        .pw-wrap { position: relative; }
+        .pw-wrap input { padding-right: 42px; }
+        .pw-eye { position: absolute; right: 13px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); font-size: 15px; padding: 0; transition: color 0.15s; }
+        .pw-eye:hover { color: var(--green); }
+
+
+>>>>>>> e74c395 (Completed)
         .btn {
             width: 100%; padding: 14px;
             background: var(--green);
@@ -151,9 +160,18 @@
         </div>
         <div class="field">
             <label>Password</label>
+<<<<<<< HEAD
             <div class="input-wrap">
                 <i class="fa-solid fa-lock"></i>
                 <input type="password" name="password" placeholder="Enter your password" required>
+=======
+            <div class="input-wrap pw-wrap">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" name="password" id="pw-input" placeholder="Enter your password" required>
+                <button type="button" class="pw-eye" onclick="togglePw()" tabindex="-1">
+                    <i class="fa-regular fa-eye" id="pw-eye-icon"></i>
+                </button>
+>>>>>>> e74c395 (Completed)
             </div>
         </div>
         <button type="submit" class="btn">Sign In</button>
@@ -163,5 +181,23 @@
         Don't have an account? <a href="{% url 'register' %}">Create one</a>
     </div>
 </div>
+<<<<<<< HEAD
 </body>
 </html>
+=======
+<script>
+function togglePw() {
+    const inp = document.getElementById('pw-input');
+    const icon = document.getElementById('pw-eye-icon');
+    if (inp.type === 'password') {
+        inp.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        inp.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+</script>
+</body>
+</html>
+>>>>>>> e74c395 (Completed)
