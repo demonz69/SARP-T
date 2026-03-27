@@ -79,10 +79,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 
-# ── CSRF / Session fix ───────────────────────────────────────
-# Allow JS to read the csrftoken cookie (required for fetch() AJAX)
+# ── CSRF & Session fix (complete) ────────────────────────────
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_USE_SESSIONS    = False
 SESSION_COOKIE_SAMESITE = 'Lax'
-# Accept CSRF from the same origin
 CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']

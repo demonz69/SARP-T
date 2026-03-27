@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class CustomUser(AbstractUser):
-    full_name = models.CharField(max_length=255)
+    full_name = models.CharField(max_length=255, blank=True, default='')
     ROLE_CHOICES = (
         ('student', 'Student'),
         ('admin', 'Admin'),

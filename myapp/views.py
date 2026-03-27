@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.utils import timezone
 import json
 
@@ -28,6 +28,7 @@ def home(request):
     return render(request, 'myapp/index.html')
 
 
+@ensure_csrf_cookie
 def register_view(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
@@ -47,6 +48,7 @@ def register_view(request):
     return render(request, 'myapp/register.html')
 
 
+@ensure_csrf_cookie
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('dashboard')

@@ -1,12 +1,21 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser, BusLocation, TripLog, Feedback, SpeedAlert
 
 
 @admin.register(CustomUser)
-class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'full_name', 'role', 'email', 'date_joined')
-    list_filter = ('role',)
+class CustomUserAdmin(UserAdmin):
+    # MUST extend UserAdmin — ModelAdmin does NOT hash passwords
+    list_display = ('username', 'full_name', 'role', 'email', 'is_active', 'date_joined')
+    list_filter = ('role', 'is_active')
     search_fields = ('username', 'full_name', 'email')
+
+    fieldsets = UserAdmin.fieldsets + (
+        ('SARP-T', {'fields': ('full_name', 'role')}),
+    )
+    add_fieldsets = UserAdmin.add_fieldsets + (
+        ('SARP-T', {'fields': ('full_name', 'role')}),
+    )
 
 
 @admin.register(BusLocation)
@@ -34,4 +43,4 @@ class SpeedAlertAdmin(admin.ModelAdmin):
 
     def mark_acknowledged(self, request, queryset):
         queryset.update(acknowledged=True)
-    mark_acknowledged.short_description = 'Mark selected alerts as acknowledged'
+    mark_acknowledged.short_description = 'Mark selected as acknowledged'
