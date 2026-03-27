@@ -12,106 +12,12 @@
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
-<<<<<<< HEAD
-            --green: #1a8a4a; --green-light: #2eb85c;
-=======
             --green: #1a8a4a; --green-light: #2eb85c; --green-mid: #22a058;
->>>>>>> e74c395 (Completed)
             --green-pale: #f0fdf6; --green-bg: #eafaf1;
             --text: #1a2e1f; --muted: #6b7c72;
             --border: #d1e8d9; --white: #fff;
             --warning: #f59e0b; --danger: #ef4444;
         }
-<<<<<<< HEAD
-        html, body { height: 100%; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--green-pale); color: var(--text); }
-
-        /* ── Header ──────────────────────────────── */
-        .header {
-            background: var(--green); color: white;
-            padding: 16px 20px 20px;
-            border-radius: 0 0 22px 22px;
-        }
-        .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-        .header-logo { display: flex; align-items: center; gap: 9px; font-size: 17px; font-weight: 800; }
-        .header-logo-icon { width: 30px; height: 30px; background: rgba(255,255,255,0.2); border-radius: 8px; display: grid; place-items: center; font-size: 14px; }
-        .logout-link { color: rgba(255,255,255,0.7); font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 5px; }
-        .logout-link:hover { color: white; }
-        .header-sub { font-size: 13px; opacity: 0.8; }
-
-        /* Route selector */
-        .route-bar { padding: 14px 16px; }
-        .route-bar label { font-size: 12px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 5px; }
-        .route-bar select {
-            width: 100%; padding: 11px 14px;
-            border: 1.5px solid var(--border); border-radius: 10px;
-            font-size: 14px; font-family: inherit; color: var(--text);
-            background: white; outline: none;
-        }
-        .route-bar select:focus { border-color: var(--green-light); }
-
-        /* ── Info cards ──────────────────────────── */
-        .info-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 0 16px 14px; }
-        .info-card {
-            background: white; border-radius: 12px; padding: 14px 12px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-            text-align: center;
-        }
-        .info-card .label { font-size: 11px; color: var(--muted); font-weight: 500; margin-bottom: 4px; }
-        .info-card .val { font-size: 22px; font-weight: 800; color: var(--text); line-height: 1; }
-        .info-card .val.eta { color: var(--green); }
-        .info-card .val.speed { color: #3b82f6; }
-        .info-card .unit { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-        /* ETA big card */
-        .eta-card {
-            margin: 0 16px 14px;
-            background: white; border-radius: 14px; padding: 18px;
-            box-shadow: 0 1px 6px rgba(26,138,74,0.10);
-            border-left: 4px solid var(--green-light);
-            display: flex; align-items: center; gap: 14px;
-        }
-        .eta-icon { font-size: 28px; color: var(--green); }
-        .eta-main { flex: 1; }
-        .eta-time { font-size: 32px; font-weight: 800; color: var(--green); line-height: 1; }
-        .eta-label { font-size: 12px; color: var(--muted); margin-top: 3px; }
-        .eta-location { font-size: 13px; font-weight: 600; color: var(--text); margin-top: 5px; }
-
-        /* Driver info */
-        .driver-card {
-            margin: 0 16px 14px; background: white; border-radius: 14px; padding: 14px 16px;
-            display: flex; align-items: center; gap: 12px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-        }
-        .driver-avatar { width: 40px; height: 40px; background: var(--green-bg); border-radius: 50%; display: grid; place-items: center; color: var(--green); font-size: 18px; }
-        .driver-name { font-size: 14px; font-weight: 700; }
-        .driver-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-        .driver-badge { margin-left: auto; background: var(--green-bg); color: var(--green); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px; }
-
-        /* Map */
-        .map-wrap { margin: 0 16px 16px; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.1); }
-        #map { height: 340px; width: 100%; }
-
-        /* Feedback section */
-        .section-title { padding: 0 16px 10px; font-size: 15px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 7px; }
-        .section-title i { color: var(--green); }
-        .feedback-form-card { margin: 0 16px 24px; background: white; border-radius: 14px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-        .fb-row { margin-bottom: 10px; }
-        .fb-row label { font-size: 12px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 4px; }
-        .fb-row input, .fb-row select, .fb-row textarea {
-            width: 100%; padding: 10px 12px;
-            border: 1.5px solid var(--border); border-radius: 9px;
-            font-size: 13px; font-family: inherit; color: var(--text);
-            background: var(--green-pale); outline: none;
-        }
-        .fb-row input:focus, .fb-row select:focus, .fb-row textarea:focus { border-color: var(--green-light); background: white; }
-        .fb-row textarea { height: 72px; resize: none; }
-        .fb-submit { width: 100%; background: var(--green); color: white; border: none; border-radius: 9px; padding: 12px; font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer; }
-        .fb-submit:hover { background: #15703c; }
-
-        /* Live indicator */
-        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        .live-dot { display: inline-block; width: 7px; height: 7px; background: #4ade80; border-radius: 50%; animation: pulse 1.5s infinite; margin-right: 5px; }
-=======
         html, body { height: 100%; font-family: 'Plus Jakarta Sans', sans-serif; background: #1a2e1f; color: var(--text); overflow: hidden; }
         .app { display: flex; flex-direction: column; height: 100vh; }
 
@@ -226,118 +132,11 @@
         .toast.success i { color: #4ade80; }
         .toast.error { background: #7f1d1d; }
         .toast.error i { color: #fca5a5; }
->>>>>>> e74c395 (Completed)
     </style>
 </head>
 <body>
 <div class="app">
 
-<<<<<<< HEAD
-<!-- Header -->
-<div class="header">
-    <div class="header-top">
-        <div class="header-logo">
-            <div class="header-logo-icon"><i class="fa-solid fa-leaf"></i></div>
-            SARP-T
-        </div>
-        <a href="{% url 'logout' %}" class="logout-link">
-            <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
-        </a>
-    </div>
-    <div class="header-sub">
-        <span class="live-dot"></span>
-        Live Bus Tracking · {{ request.user.full_name|default:request.user.username }}
-    </div>
-</div>
-
-<!-- Route selector -->
-<div class="route-bar">
-    <label>Select Your Route</label>
-    <select id="route-select" onchange="onRouteChange()">
-        <option value="bus_01" data-lat="26.8126" data-lng="87.2846">Route 1 — Dharan to College</option>
-        <option value="bus_02" data-lat="26.4525" data-lng="87.2718">Route 2 — Biratnagar to College</option>
-        <option value="bus_03" data-lat="26.6042" data-lng="87.1435">Route 3 — Inaruwa to College</option>
-        <option value="bus_04" data-lat="26.6646" data-lng="87.2748">Route 4 — Itahari Local</option>
-    </select>
-</div>
-
-<!-- Info row -->
-<div class="info-row">
-    <div class="info-card">
-        <div class="label">Speed</div>
-        <div class="val speed" id="speed-val">—</div>
-        <div class="unit">km/h</div>
-    </div>
-    <div class="info-card">
-        <div class="label">Passengers</div>
-        <div class="val" id="occ-val">—</div>
-        <div class="unit">on board</div>
-    </div>
-    <div class="info-card">
-        <div class="label">Updated</div>
-        <div class="val" style="font-size:16px;" id="time-val">—</div>
-        <div class="unit">last ping</div>
-    </div>
-</div>
-
-<!-- ETA card -->
-<div class="eta-card">
-    <div class="eta-icon"><i class="fa-solid fa-clock"></i></div>
-    <div class="eta-main">
-        <div class="eta-time" id="eta-val">— min</div>
-        <div class="eta-label">Estimated time of arrival</div>
-        <div class="eta-location" id="eta-loc">Fetching location…</div>
-    </div>
-</div>
-
-<!-- Driver info -->
-<div class="driver-card">
-    <div class="driver-avatar"><i class="fa-solid fa-user-tie"></i></div>
-    <div>
-        <div class="driver-name">Verified Driver</div>
-        <div class="driver-sub"><span id="driver-status">Speed Normal</span> · Safety Score: 98%</div>
-    </div>
-    <div class="driver-badge"><i class="fa-solid fa-shield-check"></i> Verified</div>
-</div>
-
-<!-- Map -->
-<div class="map-wrap">
-    <div id="map"></div>
-</div>
-
-<!-- Feedback -->
-<div class="section-title"><i class="fa-solid fa-star"></i> Leave Feedback</div>
-<div class="feedback-form-card">
-    {% if messages %}
-    {% for message in messages %}
-    <div style="background:#ecfdf5;color:#16a34a;padding:10px 12px;border-radius:8px;font-size:13px;margin-bottom:12px;">
-        <i class="fa-solid fa-circle-check"></i> {{ message }}
-    </div>
-    {% endfor %}
-    {% endif %}
-    <form method="POST" action="{% url 'submit_feedback' %}">
-        {% csrf_token %}
-        <div class="fb-row">
-            <label>Bus</label>
-            <input type="text" name="bus_id" id="fb-bus" placeholder="e.g. bus_01" required>
-        </div>
-        <div class="fb-row">
-            <label>Rating</label>
-            <select name="rating">
-                <option value="5">★★★★★ Excellent</option>
-                <option value="4">★★★★☆ Good</option>
-                <option value="3">★★★☆☆ Average</option>
-                <option value="2">★★☆☆☆ Poor</option>
-                <option value="1">★☆☆☆☆ Very Poor</option>
-            </select>
-        </div>
-        <div class="fb-row">
-            <label>Comment</label>
-            <textarea name="comment" placeholder="How was your ride?" required></textarea>
-        </div>
-        <button type="submit" class="fb-submit">Submit Feedback</button>
-    </form>
-=======
     <div class="topbar">
         <div class="topbar-left">
             <div class="logo-icon"><i class="fa-solid fa-leaf"></i></div>
@@ -509,97 +308,10 @@
             <i class="fa-solid fa-paper-plane"></i> Submit Feedback
         </button>
     </div>
->>>>>>> e74c395 (Completed)
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-<<<<<<< HEAD
-// College coordinates (destination)
-const COLLEGE_LAT = 26.6646, COLLEGE_LNG = 87.2748;
-
-const map = L.map('map').setView([COLLEGE_LAT, COLLEGE_LNG], 13);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-    attribution: '© OpenStreetMap contributors © CARTO', maxZoom: 19
-}).addTo(map);
-
-// College marker
-L.marker([COLLEGE_LAT, COLLEGE_LNG], {
-    icon: L.divIcon({
-        html: '<div style="background:#1a2e1f;color:white;border-radius:8px;padding:4px 7px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.3)">🏫 IIC College</div>',
-        className: '', iconAnchor: [40, 10]
-    })
-}).addTo(map);
-
-const busIcon = L.divIcon({
-    html: '<div style="background:#1a8a4a;color:white;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:16px;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3)"><i class="fa fa-bus"></i></div>',
-    className: '', iconSize: [36, 36], iconAnchor: [18, 18]
-});
-
-let busMarker = null;
-
-function getSelectedBusId() {
-    return document.getElementById('route-select').value;
-}
-
-function onRouteChange() {
-    const select = document.getElementById('route-select');
-    const opt = select.options[select.selectedIndex];
-    document.getElementById('fb-bus').value = select.value;
-    fetchBusData();
-}
-
-function fetchBusData() {
-    const busId = getSelectedBusId();
-    fetch(`/api/location/?device_id=${busId}`)
-        .then(r => r.json())
-        .then(data => {
-            if (data.error) {
-                document.getElementById('eta-loc').textContent = 'No GPS signal yet';
-                return;
-            }
-            const pos = [data.lat, data.lng];
-            document.getElementById('speed-val').textContent = data.speed.toFixed(0);
-            document.getElementById('occ-val').textContent = data.occupancy;
-            document.getElementById('time-val').textContent = data.timestamp;
-
-            if (data.speed > 60) {
-                document.getElementById('driver-status').textContent = '⚠ Speed Alert';
-                document.getElementById('driver-status').style.color = '#ef4444';
-            } else {
-                document.getElementById('driver-status').textContent = 'Speed Normal';
-                document.getElementById('driver-status').style.color = '';
-            }
-
-            if (busMarker) {
-                busMarker.setLatLng(pos);
-            } else {
-                busMarker = L.marker(pos, {icon: busIcon}).addTo(map)
-                    .bindPopup(`<b>${busId}</b><br>${data.speed} km/h · ${data.occupancy} passengers`);
-            }
-            map.panTo(pos);
-        })
-        .catch(() => {});
-
-    // Fetch ETA
-    fetch(`/api/eta/?device_id=${busId}&lat=${COLLEGE_LAT}&lng=${COLLEGE_LNG}`)
-        .then(r => r.json())
-        .then(data => {
-            if (data.eta_minutes !== null) {
-                document.getElementById('eta-val').textContent = data.eta_minutes + ' min';
-                document.getElementById('eta-loc').textContent =
-                    `${data.distance_km} km away · ${data.current_speed.toFixed(0)} km/h`;
-            } else {
-                document.getElementById('eta-val').textContent = '— min';
-                document.getElementById('eta-loc').textContent = 'No GPS signal yet';
-            }
-        })
-        .catch(() => {});
-}
-
-// Init
-document.getElementById('fb-bus').value = getSelectedBusId();
-=======
 const COLLEGE_LAT = 26.6646, COLLEGE_LNG = 87.2748;
 const CSRF = '{{ csrf_token }}';
 
@@ -886,7 +598,6 @@ function submitFeedback() {
 const initRoute = getSelectedRoute();
 applyRouteToMap(initRoute);
 updatePanel(initRoute);
->>>>>>> e74c395 (Completed)
 fetchBusData();
 setInterval(fetchBusData, 5000);
 </script>
