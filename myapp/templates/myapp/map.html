@@ -148,9 +148,7 @@
                 <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
                 {{ request.user.full_name|default:request.user.username }}
             </div>
-            <a href="{% url 'logout' %}" class="logout-btn">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
-            </a>
+            <form method="POST" action="{% url 'logout' %}" style="margin:0">{% csrf_token %}<button type="submit" class="logout-btn" style="background:none;border:none;cursor:pointer;font-family:inherit"><i class="fa-solid fa-right-from-bracket"></i> Logout</button></form>
         </div>
     </div>
 
@@ -313,7 +311,11 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const COLLEGE_LAT = 26.6646, COLLEGE_LNG = 87.2748;
-const CSRF = '{{ csrf_token }}';
+function getCsrf() {
+    const name = 'csrftoken';
+    const cookie = document.cookie.split(';').find(c => c.trim().startsWith(name + '='));
+    return cookie ? decodeURIComponent(cookie.trim().slice(name.length + 1)) : '{{ csrf_token }}';
+}
 
 // ── Route definitions with accurate GPS coordinates ──────────────────────────
 // All paths verified against actual roads in Eastern Nepal / Jhapa district
@@ -573,7 +575,7 @@ function submitFeedback() {
     fd.append('bus_id', busId);
     fd.append('rating', rating);
     fd.append('comment', comment);
-    fd.append('csrfmiddlewaretoken', CSRF);
+    fd.append('csrfmiddlewaretoken', getCsrf());
 
     fetch('/api/feedback/', { method: 'POST', body: fd })
         .then(r => r.json()).then(data => {

@@ -272,11 +272,18 @@ function confirmAction(url,msg){
 function closeConfirm(){document.getElementById('confirm-bg').classList.remove('open');}
 document.getElementById('confirm-bg').addEventListener('click',e=>{if(e.target===document.getElementById('confirm-bg'))closeConfirm();});
 
+// ── CSRF cookie reader (always fresh, never stale) ──
+function getCsrf() {
+    const name = 'csrftoken';
+    const cookie = document.cookie.split(';').find(c => c.trim().startsWith(name + '='));
+    return cookie ? decodeURIComponent(cookie.trim().slice(name.length + 1)) : '{{ csrf_token }}';
+}
+
 // ── Generic AJAX POST ──
 function ajaxPost(url, formData, onSuccess) {
     const fd = formData || new FormData();
-    fd.append('csrfmiddlewaretoken','{{ csrf_token }}');
-    fetch(url,{method:'POST',body:fd})
+    fd.append('csrfmiddlewaretoken', getCsrf());
+    fetch(url, {method:'POST', body:fd})
         .then(r=>r.json()).then(data=>{
             if(data.status==='ok'){
                 showToast(data.message||'Done!');
